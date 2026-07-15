@@ -1,11 +1,11 @@
 package com.jejianil.erms.service;
 
-import com.jejianil.erms.entity.Role;
+import com.jejianil.erms.dto.response.RoleResponse;
 
 import java.util.List;
 
 public interface RoleService {
 
-    List<Role> getAllRoles();
+    List<RoleResponse> getAllRoles();
 
 }
