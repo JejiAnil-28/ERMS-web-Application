@@ -1,6 +1,8 @@
 package com.jejianil.erms.service.impl;
 
+import com.jejianil.erms.dto.request.LoginRequest;
 import com.jejianil.erms.dto.request.RegisterRequest;
+import com.jejianil.erms.dto.response.LoginResponse;
 import com.jejianil.erms.dto.response.UserResponse;
 import com.jejianil.erms.entity.Role;
 import com.jejianil.erms.entity.User;
@@ -55,5 +57,28 @@ public class UserServiceImpl implements UserService {
         User savedUser = userRepository.save(user);
 
         return UserMapper.toResponse(savedUser);
+    }
+
+    @Override
+    public LoginResponse login(LoginRequest request) {
+
+        User user = userRepository.findByUsername(request.getUsername())
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Invalid username or password"));
+
+        boolean passwordMatched =
+                passwordEncoder.matches(
+                        request.getPassword(),
+                        user.getPassword()
+                );
+
+        if (!passwordMatched) {
+            throw new ResourceNotFoundException("Invalid username or password");
+        }
+
+        return new LoginResponse(
+                user.getUsername(),
+                user.getRole().getRoleName()
+        );
     }
 }

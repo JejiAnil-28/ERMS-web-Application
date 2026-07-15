@@ -1,6 +1,8 @@
 package com.jejianil.erms.controller;
 
+import com.jejianil.erms.dto.request.LoginRequest;
 import com.jejianil.erms.dto.request.RegisterRequest;
+import com.jejianil.erms.dto.response.LoginResponse;
 import com.jejianil.erms.dto.response.UserResponse;
 import com.jejianil.erms.payload.ApiResponse;
 import com.jejianil.erms.service.UserService;
@@ -33,5 +35,24 @@ public class AuthController {
                 );
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<ApiResponse<LoginResponse>> login(
+            @Valid @RequestBody LoginRequest request){
+
+        LoginResponse response =
+                userService.login(request);
+
+        return ResponseEntity.ok(
+
+                new ApiResponse<>(
+                        true,
+                        "Login successful",
+                        response
+                )
+
+        );
+
     }
 }
