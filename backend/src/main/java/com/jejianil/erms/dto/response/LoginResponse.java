@@ -13,7 +13,5 @@ public class LoginResponse {
 
     private String username;
     private String role;
-
-
-    // JWT token will be added in the next step
+    private String token;
 }

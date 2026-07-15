@@ -11,6 +11,7 @@ import com.jejianil.erms.exception.ResourceNotFoundException;
 import com.jejianil.erms.mapper.UserMapper;
 import com.jejianil.erms.repository.RoleRepository;
 import com.jejianil.erms.repository.UserRepository;
+import com.jejianil.erms.security.JwtService;
 import com.jejianil.erms.service.UserService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,14 +22,19 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
-    public UserServiceImpl(UserRepository userRepository,
-                           RoleRepository roleRepository,
-                           PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(
+            UserRepository userRepository,
+            RoleRepository roleRepository,
+            PasswordEncoder passwordEncoder,
+            JwtService jwtService
+    ) {
 
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
     @Override
@@ -76,9 +82,12 @@ public class UserServiceImpl implements UserService {
             throw new ResourceNotFoundException("Invalid username or password");
         }
 
+        String token = jwtService.generateToken(user);
+
         return new LoginResponse(
                 user.getUsername(),
-                user.getRole().getRoleName()
+                user.getRole().getRoleName(),
+                token
         );
     }
 }
