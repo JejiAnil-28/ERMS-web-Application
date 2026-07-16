@@ -7,6 +7,7 @@ import com.jejianil.erms.service.EmployeeService;
 
 import jakarta.validation.Valid;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -103,6 +104,42 @@ public class EmployeeController {
                         true,
                         "Employee deleted successfully",
                         null
+                )
+        );
+    }
+
+    @GetMapping("/page")
+    public ResponseEntity<ApiResponse<Page<EmployeeResponse>>> getEmployees(
+
+            @RequestParam(defaultValue = "0")
+            int page,
+
+            @RequestParam(defaultValue = "5")
+            int size,
+
+            @RequestParam(defaultValue = "id")
+            String sort,
+
+            @RequestParam(defaultValue = "asc")
+            String direction) {
+
+        Page<EmployeeResponse> response =
+                employeeService.getEmployees(
+                        page,
+                        size,
+                        sort,
+                        direction
+                );
+
+        return ResponseEntity.ok(
+
+                new ApiResponse<>(
+
+                        true,
+
+                        "Employees fetched successfully",
+
+                        response
                 )
         );
     }

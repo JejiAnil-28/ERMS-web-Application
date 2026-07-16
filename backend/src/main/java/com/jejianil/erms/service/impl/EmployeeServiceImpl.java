@@ -13,6 +13,11 @@ import com.jejianil.erms.repository.EmployeeRepository;
 import com.jejianil.erms.repository.RoleRepository;
 import com.jejianil.erms.service.EmployeeService;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -174,6 +179,24 @@ public class EmployeeServiceImpl implements EmployeeService {
                         new ResourceNotFoundException(
                                 "Role not found with id: " + id
                         ));
+    }
+
+    @Override
+    public Page<EmployeeResponse> getEmployees(
+            int page,
+            int size,
+            String sortBy,
+            String direction) {
+
+        Sort sort = direction.equalsIgnoreCase("desc")
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
+
+        Pageable pageable =
+                PageRequest.of(page, size, sort);
+
+        return employeeRepository.findAll(pageable)
+                .map(EmployeeMapper::toResponse);
     }
 
 }
