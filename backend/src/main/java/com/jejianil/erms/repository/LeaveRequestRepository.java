@@ -14,4 +14,6 @@ public interface LeaveRequestRepository
 
     List<LeaveRequest> findByStatusIgnoreCase(String status);
 
+    long countByStatusIgnoreCase(String status);
+
 }

@@ -21,6 +21,8 @@ public class AttendanceResponse {
 
     private String remarks;
 
+
+
     public AttendanceResponse() {
     }
 

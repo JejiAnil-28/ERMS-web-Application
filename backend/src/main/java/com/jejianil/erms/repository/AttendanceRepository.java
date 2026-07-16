@@ -23,4 +23,7 @@ public interface AttendanceRepository
             Long employeeId,
             LocalDate attendanceDate
     );
+
+    long countByAttendanceDate(LocalDate attendanceDate);
+    long countByStatusIgnoreCase(String status);
 }

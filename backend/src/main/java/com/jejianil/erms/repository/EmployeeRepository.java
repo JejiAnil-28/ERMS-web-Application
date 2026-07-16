@@ -33,4 +33,5 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
     List<Employee> findByStatusIgnoreCase(String status);
 
+    long countByStatusIgnoreCase(String active);
 }
