@@ -144,4 +144,20 @@ public class EmployeeController {
         );
     }
 
+    @GetMapping("/search")
+    public ResponseEntity<ApiResponse<List<EmployeeResponse>>> searchEmployees(
+            @RequestParam String keyword) {
+
+        List<EmployeeResponse> employees =
+                employeeService.searchEmployees(keyword);
+
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        true,
+                        "Employees fetched successfully",
+                        employees
+                )
+        );
+    }
+
 }

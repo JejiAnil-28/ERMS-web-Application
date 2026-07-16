@@ -4,6 +4,7 @@ import com.jejianil.erms.entity.Employee;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
+import java.util.List;
 
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
@@ -18,5 +19,12 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     boolean existsByEmail(String email);
 
     boolean existsByPhone(String phone);
+
+    List<Employee> findByEmployeeCodeContainingIgnoreCaseOrFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrEmailContainingIgnoreCase(
+            String employeeCode,
+            String firstName,
+            String lastName,
+            String email
+    );
 
 }

@@ -24,4 +24,6 @@ public interface EmployeeService {
             String sortBy,
             String direction
     );
+
+    List<EmployeeResponse> searchEmployees(String keyword);
 }

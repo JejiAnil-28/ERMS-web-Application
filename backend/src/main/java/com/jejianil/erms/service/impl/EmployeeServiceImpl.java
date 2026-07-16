@@ -199,4 +199,19 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .map(EmployeeMapper::toResponse);
     }
 
+    @Override
+    public List<EmployeeResponse> searchEmployees(String keyword) {
+
+        return employeeRepository
+                .findByEmployeeCodeContainingIgnoreCaseOrFirstNameContainingIgnoreCaseOrLastNameContainingIgnoreCaseOrEmailContainingIgnoreCase(
+                        keyword,
+                        keyword,
+                        keyword,
+                        keyword
+                )
+                .stream()
+                .map(EmployeeMapper::toResponse)
+                .toList();
+    }
+
 }
