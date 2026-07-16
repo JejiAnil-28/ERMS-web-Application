@@ -50,17 +50,9 @@ public class EmployeeServiceImpl implements EmployeeService {
             throw new DuplicateResourceException("Phone already exists.");
         }
 
-        Department department = departmentRepository.findById(request.getDepartmentId())
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Department not found with id: " + request.getDepartmentId()
-                        ));
+        Department department = findDepartmentById(request.getDepartmentId());
 
-        Role role = roleRepository.findById(request.getRoleId())
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "Role not found with id: " + request.getRoleId()
-                        ));
+        Role role = findRoleById(request.getRoleId());
 
         Employee employee = new Employee();
 
@@ -96,17 +88,92 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeResponse getEmployeeById(Long id) {
-        throw new UnsupportedOperationException("Not implemented yet");
+
+        Employee employee = findEmployeeById(id);
+
+        return EmployeeMapper.toResponse(employee);
     }
 
     @Override
     public EmployeeResponse updateEmployee(Long id, EmployeeRequest request) {
-        throw new UnsupportedOperationException("Not implemented yet");
+
+        Employee employee = findEmployeeById(id);
+
+        // Employee Code Validation
+        if (!employee.getEmployeeCode().equals(request.getEmployeeCode())
+                && employeeRepository.existsByEmployeeCode(request.getEmployeeCode())) {
+
+            throw new DuplicateResourceException("Employee code already exists.");
+        }
+
+        // Email Validation
+        if (!employee.getEmail().equals(request.getEmail())
+                && employeeRepository.existsByEmail(request.getEmail())) {
+
+            throw new DuplicateResourceException("Email already exists.");
+        }
+
+        // Phone Validation
+        if (!employee.getPhone().equals(request.getPhone())
+                && employeeRepository.existsByPhone(request.getPhone())) {
+
+            throw new DuplicateResourceException("Phone already exists.");
+        }
+
+        Department department = findDepartmentById(request.getDepartmentId());
+        Role role = findRoleById(request.getRoleId());
+
+        employee.setEmployeeCode(request.getEmployeeCode());
+        employee.setFirstName(request.getFirstName());
+        employee.setLastName(request.getLastName());
+        employee.setEmail(request.getEmail());
+        employee.setPhone(request.getPhone());
+        employee.setGender(request.getGender());
+        employee.setDateOfBirth(request.getDateOfBirth());
+        employee.setSalary(request.getSalary());
+        employee.setHireDate(request.getHireDate());
+
+        employee.setDepartment(department);
+        employee.setRole(role);
+
+        Employee updatedEmployee = employeeRepository.save(employee);
+
+        return EmployeeMapper.toResponse(updatedEmployee);
     }
 
     @Override
     public void deleteEmployee(Long id) {
-        throw new UnsupportedOperationException("Not implemented yet");
+
+        Employee employee = findEmployeeById(id);
+
+        employeeRepository.delete(employee);
+    }
+
+    private Employee findEmployeeById(Long id) {
+
+        return employeeRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Employee not found with id: " + id
+                        ));
+    }
+
+    private Department findDepartmentById(Long id) {
+
+        return departmentRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Department not found with id: " + id
+                        ));
+    }
+
+    private Role findRoleById(Long id) {
+
+        return roleRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Role not found with id: " + id
+                        ));
     }
 
 }

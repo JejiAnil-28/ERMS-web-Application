@@ -55,4 +55,56 @@ public class EmployeeController {
         );
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<EmployeeResponse>> getEmployeeById(
+            @PathVariable Long id) {
+
+        EmployeeResponse response =
+                employeeService.getEmployeeById(id);
+
+        return ResponseEntity.ok(
+
+                new ApiResponse<>(
+
+                        true,
+
+                        "Employee fetched successfully",
+
+                        response
+                )
+        );
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<EmployeeResponse>> updateEmployee(
+            @PathVariable Long id,
+            @Valid @RequestBody EmployeeRequest request) {
+
+        EmployeeResponse response =
+                employeeService.updateEmployee(id, request);
+
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        true,
+                        "Employee updated successfully",
+                        response
+                )
+        );
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<Void>> deleteEmployee(
+            @PathVariable Long id) {
+
+        employeeService.deleteEmployee(id);
+
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        true,
+                        "Employee deleted successfully",
+                        null
+                )
+        );
+    }
+
 }
