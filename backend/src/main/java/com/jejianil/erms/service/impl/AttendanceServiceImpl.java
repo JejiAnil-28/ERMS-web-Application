@@ -94,12 +94,20 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     @Override
     public List<AttendanceResponse> getTodayAttendance() {
-        throw new UnsupportedOperationException("Not implemented yet");
+
+        return attendanceRepository.findByAttendanceDate(LocalDate.now())
+                .stream()
+                .map(AttendanceMapper::toResponse)
+                .toList();
     }
 
     @Override
     public List<AttendanceResponse> getEmployeeAttendance(Long employeeId) {
-        throw new UnsupportedOperationException("Not implemented yet");
+
+        return attendanceRepository.findByEmployeeId(employeeId)
+                .stream()
+                .map(AttendanceMapper::toResponse)
+                .toList();
     }
 
 }

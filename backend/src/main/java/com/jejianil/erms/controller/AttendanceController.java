@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/attendance")
 public class AttendanceController {
@@ -56,6 +58,37 @@ public class AttendanceController {
                 new ApiResponse<>(
                         true,
                         "Check-out successful",
+                        response
+                )
+        );
+    }
+
+    @GetMapping("/today")
+    public ResponseEntity<ApiResponse<List<AttendanceResponse>>> getTodayAttendance() {
+
+        List<AttendanceResponse> response =
+                attendanceService.getTodayAttendance();
+
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        true,
+                        "Today's attendance fetched successfully",
+                        response
+                )
+        );
+    }
+
+    @GetMapping("/employee/{employeeId}")
+    public ResponseEntity<ApiResponse<List<AttendanceResponse>>> getEmployeeAttendance(
+            @PathVariable Long employeeId) {
+
+        List<AttendanceResponse> response =
+                attendanceService.getEmployeeAttendance(employeeId);
+
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        true,
+                        "Employee attendance fetched successfully",
                         response
                 )
         );
