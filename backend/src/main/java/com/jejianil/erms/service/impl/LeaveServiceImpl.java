@@ -60,12 +60,20 @@ public class LeaveServiceImpl implements LeaveService {
 
     @Override
     public List<LeaveResponse> getEmployeeLeaves(Long employeeId) {
-        throw new UnsupportedOperationException("Not implemented yet");
+
+        return leaveRepository.findByEmployeeId(employeeId)
+                .stream()
+                .map(LeaveMapper::toResponse)
+                .toList();
     }
 
     @Override
     public List<LeaveResponse> getPendingLeaves() {
-        throw new UnsupportedOperationException("Not implemented yet");
+
+        return leaveRepository.findByStatusIgnoreCase("PENDING")
+                .stream()
+                .map(LeaveMapper::toResponse)
+                .toList();
     }
 
     @Override

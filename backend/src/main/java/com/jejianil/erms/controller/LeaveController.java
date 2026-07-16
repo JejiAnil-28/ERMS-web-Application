@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/leaves")
 public class LeaveController {
@@ -66,6 +68,31 @@ public class LeaveController {
                                 leaveId,
                                 approverId
                         )
+                )
+        );
+    }
+
+    @GetMapping("/employee/{employeeId}")
+    public ResponseEntity<ApiResponse<List<LeaveResponse>>> getEmployeeLeaves(
+            @PathVariable Long employeeId) {
+
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        true,
+                        "Employee leave history fetched successfully",
+                        leaveService.getEmployeeLeaves(employeeId)
+                )
+        );
+    }
+
+    @GetMapping("/pending")
+    public ResponseEntity<ApiResponse<List<LeaveResponse>>> getPendingLeaves() {
+
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        true,
+                        "Pending leave requests fetched successfully",
+                        leaveService.getPendingLeaves()
                 )
         );
     }
