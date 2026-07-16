@@ -160,4 +160,43 @@ public class EmployeeController {
         );
     }
 
+    @GetMapping("/department/{departmentId}")
+    public ResponseEntity<ApiResponse<List<EmployeeResponse>>> getByDepartment(
+            @PathVariable Long departmentId) {
+
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        true,
+                        "Employees fetched successfully",
+                        employeeService.getEmployeesByDepartment(departmentId)
+                )
+        );
+    }
+
+    @GetMapping("/role/{roleId}")
+    public ResponseEntity<ApiResponse<List<EmployeeResponse>>> getByRole(
+            @PathVariable Long roleId) {
+
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        true,
+                        "Employees fetched successfully",
+                        employeeService.getEmployeesByRole(roleId)
+                )
+        );
+    }
+
+    @GetMapping("/status/{status}")
+    public ResponseEntity<ApiResponse<List<EmployeeResponse>>> getByStatus(
+            @PathVariable String status) {
+
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        true,
+                        "Employees fetched successfully",
+                        employeeService.getEmployeesByStatus(status)
+                )
+        );
+    }
+
 }

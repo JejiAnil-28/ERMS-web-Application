@@ -214,4 +214,29 @@ public class EmployeeServiceImpl implements EmployeeService {
                 .toList();
     }
 
+    @Override
+    public List<EmployeeResponse> getEmployeesByDepartment(Long departmentId) {
+
+        return employeeRepository.findByDepartmentId(departmentId)
+                .stream()
+                .map(EmployeeMapper::toResponse)
+                .toList();
+    }
+    @Override
+    public List<EmployeeResponse> getEmployeesByRole(Long roleId) {
+
+        return employeeRepository.findByRoleId(roleId)
+                .stream()
+                .map(EmployeeMapper::toResponse)
+                .toList();
+    }
+    @Override
+    public List<EmployeeResponse> getEmployeesByStatus(String status) {
+
+        return employeeRepository.findByStatusIgnoreCase(status)
+                .stream()
+                .map(EmployeeMapper::toResponse)
+                .toList();
+    }
+
 }

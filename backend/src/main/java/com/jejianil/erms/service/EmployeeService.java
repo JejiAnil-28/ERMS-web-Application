@@ -26,4 +26,10 @@ public interface EmployeeService {
     );
 
     List<EmployeeResponse> searchEmployees(String keyword);
+
+    List<EmployeeResponse> getEmployeesByDepartment(Long departmentId);
+
+    List<EmployeeResponse> getEmployeesByRole(Long roleId);
+
+    List<EmployeeResponse> getEmployeesByStatus(String status);
 }
