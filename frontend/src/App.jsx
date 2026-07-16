@@ -1,7 +1,9 @@
+import AppRoutes from "./routes/AppRoutes";
+
 function App() {
-    return (
-        <h1>Employee Resource Management System</h1>
-    );
+
+    return <AppRoutes />;
+
 }
 
 export default App;
