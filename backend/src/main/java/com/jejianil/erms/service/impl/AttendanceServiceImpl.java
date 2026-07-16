@@ -68,7 +68,28 @@ public class AttendanceServiceImpl implements AttendanceService {
 
     @Override
     public AttendanceResponse checkOut(Long employeeId) {
-        throw new UnsupportedOperationException("Not implemented yet");
+
+        LocalDate today = LocalDate.now();
+
+        Attendance attendance = attendanceRepository
+                .findByEmployeeIdAndAttendanceDate(employeeId, today)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "No check-in found for today."
+                        ));
+
+        if (attendance.getCheckOutTime() != null) {
+            throw new DuplicateResourceException(
+                    "Employee already checked out today."
+            );
+        }
+
+        attendance.setCheckOutTime(LocalTime.now());
+
+        Attendance updatedAttendance =
+                attendanceRepository.save(attendance);
+
+        return AttendanceMapper.toResponse(updatedAttendance);
     }
 
     @Override
