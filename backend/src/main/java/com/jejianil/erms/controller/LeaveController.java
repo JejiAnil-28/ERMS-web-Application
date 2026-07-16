@@ -35,4 +35,38 @@ public class LeaveController {
                         )
                 );
     }
+
+    @PutMapping("/{leaveId}/approve/{approverId}")
+    public ResponseEntity<ApiResponse<LeaveResponse>> approveLeave(
+            @PathVariable Long leaveId,
+            @PathVariable Long approverId) {
+
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        true,
+                        "Leave approved successfully",
+                        leaveService.approveLeave(
+                                leaveId,
+                                approverId
+                        )
+                )
+        );
+    }
+
+    @PutMapping("/{leaveId}/reject/{approverId}")
+    public ResponseEntity<ApiResponse<LeaveResponse>> rejectLeave(
+            @PathVariable Long leaveId,
+            @PathVariable Long approverId) {
+
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        true,
+                        "Leave rejected successfully",
+                        leaveService.rejectLeave(
+                                leaveId,
+                                approverId
+                        )
+                )
+        );
+    }
 }

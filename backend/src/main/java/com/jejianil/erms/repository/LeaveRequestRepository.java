@@ -12,4 +12,6 @@ public interface LeaveRequestRepository
 
     List<LeaveRequest> findByStatus(String status);
 
+    List<LeaveRequest> findByStatusIgnoreCase(String status);
+
 }

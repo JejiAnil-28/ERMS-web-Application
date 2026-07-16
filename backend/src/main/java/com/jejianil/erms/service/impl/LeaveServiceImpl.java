@@ -13,6 +13,7 @@ import com.jejianil.erms.repository.UserRepository;
 import com.jejianil.erms.service.LeaveService;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -69,11 +70,65 @@ public class LeaveServiceImpl implements LeaveService {
 
     @Override
     public LeaveResponse approveLeave(Long leaveId, Long approverId) {
-        throw new UnsupportedOperationException("Not implemented yet");
+
+        LeaveRequest leave = findLeaveById(leaveId);
+
+        if (!leave.getStatus().equalsIgnoreCase("PENDING")) {
+            throw new IllegalStateException(
+                    "Leave request has already been processed."
+            );
+        }
+
+        User approver = findUserById(approverId);
+
+        leave.setStatus("APPROVED");
+        leave.setApprovedBy(approver);
+        leave.setApprovedAt(LocalDateTime.now());
+
+        LeaveRequest updatedLeave =
+                leaveRepository.save(leave);
+
+        return LeaveMapper.toResponse(updatedLeave);
     }
 
     @Override
     public LeaveResponse rejectLeave(Long leaveId, Long approverId) {
-        throw new UnsupportedOperationException("Not implemented yet");
+
+        LeaveRequest leave = findLeaveById(leaveId);
+
+        if (!leave.getStatus().equalsIgnoreCase("PENDING")) {
+            throw new IllegalStateException(
+                    "Leave request has already been processed."
+            );
+        }
+
+        User approver = findUserById(approverId);
+
+        leave.setStatus("REJECTED");
+        leave.setApprovedBy(approver);
+        leave.setApprovedAt(LocalDateTime.now());
+
+        LeaveRequest updatedLeave =
+                leaveRepository.save(leave);
+
+        return LeaveMapper.toResponse(updatedLeave);
+    }
+
+    private LeaveRequest findLeaveById(Long leaveId) {
+
+        return leaveRepository.findById(leaveId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Leave request not found with id: " + leaveId
+                        ));
+    }
+
+    private User findUserById(Long userId) {
+
+        return userRepository.findById(userId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "User not found with id: " + userId
+                        ));
     }
 }
