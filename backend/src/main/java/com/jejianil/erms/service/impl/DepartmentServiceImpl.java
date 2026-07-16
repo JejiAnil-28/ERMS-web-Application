@@ -59,17 +59,54 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public DepartmentResponse getDepartmentById(Long id) {
-        throw new UnsupportedOperationException("Not implemented yet");
+
+        Department department = findDepartmentById(id);
+
+        return DepartmentMapper.toResponse(department);
     }
 
     @Override
-    public DepartmentResponse updateDepartment(Long id, DepartmentRequest request) {
-        throw new UnsupportedOperationException("Not implemented yet");
+    public DepartmentResponse updateDepartment(
+            Long id,
+            DepartmentRequest request) {
+
+        Department department = findDepartmentById(id);
+
+        // Check duplicate name (only if the name is changing)
+        if (!department.getDepartmentName().equals(request.getDepartmentName())
+                && departmentRepository.existsByDepartmentName(request.getDepartmentName())) {
+
+            throw new DuplicateResourceException(
+                    "Department already exists."
+            );
+        }
+
+        department.setDepartmentName(request.getDepartmentName());
+        department.setDepartmentHead(request.getDepartmentHead());
+        department.setDescription(request.getDescription());
+
+        Department updatedDepartment =
+                departmentRepository.save(department);
+
+        return DepartmentMapper.toResponse(updatedDepartment);
     }
 
     @Override
     public void deleteDepartment(Long id) {
-        throw new UnsupportedOperationException("Not implemented yet");
+
+        Department department = findDepartmentById(id);
+
+        departmentRepository.delete(department);
     }
+
+    private Department findDepartmentById(Long id) {
+
+        return departmentRepository.findById(id)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "Department not found with id: " + id
+                        ));
+    }
+
 
 }

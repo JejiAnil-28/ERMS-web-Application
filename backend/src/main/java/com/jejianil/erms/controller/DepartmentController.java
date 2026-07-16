@@ -71,4 +71,60 @@ public class DepartmentController {
         );
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<ApiResponse<DepartmentResponse>> getDepartmentById(
+            @PathVariable Long id) {
+
+        DepartmentResponse response =
+                departmentService.getDepartmentById(id);
+
+        return ResponseEntity.ok(
+
+                new ApiResponse<>(
+
+                        true,
+
+                        "Department fetched successfully",
+
+                        response
+                )
+        );
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ApiResponse<DepartmentResponse>> updateDepartment(
+            @PathVariable Long id,
+            @Valid @RequestBody DepartmentRequest request) {
+
+        DepartmentResponse response =
+                departmentService.updateDepartment(id, request);
+
+        return ResponseEntity.ok(
+                new ApiResponse<>(
+                        true,
+                        "Department updated successfully",
+                        response
+                )
+        );
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ApiResponse<Void>> deleteDepartment(
+            @PathVariable Long id) {
+
+        departmentService.deleteDepartment(id);
+
+        return ResponseEntity.ok(
+
+                new ApiResponse<>(
+
+                        true,
+
+                        "Department deleted successfully",
+
+                        null
+                )
+        );
+    }
+
 }
