@@ -15,7 +15,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
        JOIN FETCH u.role
        WHERE u.username = :username
        """)
-    Optional<User> findByUsername(@Param("username") String username);  
+    Optional<User> findByUsername(@Param("username") String username);
 
     Optional<User> findByEmail(String email);
 
