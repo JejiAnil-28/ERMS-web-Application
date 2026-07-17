@@ -19,12 +19,20 @@ import {
     createDepartment,
     updateDepartment
 } from "../../services/departmentService";
+import DeleteDepartmentDialog
+from "../../components/department/DeleteDepartmentDialog";
+
+import { deleteDepartment }
+from "../../services/departmentService";
 
 
 function DepartmentList() {
 
     const [departments, setDepartments] = useState([]);
     const [openDialog, setOpenDialog] = useState(false);
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+
+const [departmentToDelete, setDepartmentToDelete] = useState(null);
 
 const [selectedDepartment, setSelectedDepartment] = useState(null);
 
@@ -96,7 +104,13 @@ const [selectedDepartment, setSelectedDepartment] = useState(null);
 
                     <IconButton
                         color="error"
-                        onClick={() => console.log("Delete", params.row)}
+                        onClick={() => {
+
+    setDepartmentToDelete(params.row);
+
+    setDeleteDialogOpen(true);
+
+}}
                     >
                         <DeleteIcon />
                     </IconButton>
@@ -197,6 +211,37 @@ const [selectedDepartment, setSelectedDepartment] = useState(null);
 }}
 
 />
+
+<DeleteDepartmentDialog
+
+    open={deleteDialogOpen}
+
+    department={departmentToDelete}
+
+    onClose={() => setDeleteDialogOpen(false)}
+
+    onConfirm={async () => {
+
+        try {
+
+            await deleteDepartment(
+                departmentToDelete.id
+            );
+
+            await loadDepartments();
+
+            setDeleteDialogOpen(false);
+
+        } catch (error) {
+
+            console.error(error);
+
+        }
+
+    }}
+
+/>  
+
 
         </Box>
 
