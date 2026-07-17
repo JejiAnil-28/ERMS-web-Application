@@ -6,7 +6,8 @@ import {
 } from "react-router-dom";
 
 import MainLayout from "../components/layout/MainLayout";
-
+import ProtectedRoute from "./ProtectedRoute";
+import Login from "../pages/auth/Login";
 import Dashboard from "../pages/dashboard/Dashboard";
 import EmployeeList from "../pages/employee/EmployeeList";
 import DepartmentList from "../pages/department/DepartmentList";
@@ -19,45 +20,50 @@ function AppRoutes() {
 
         <BrowserRouter>
 
-            <MainLayout>
+    <Routes>
 
-                <Routes>
+        {/* Public Route */}
 
-                    <Route
-                        path="/"
-                        element={<Navigate to="/dashboard" />}
-                    />
+            <Route
+                path="/"
+                element={<Login />}
+            />
 
-                    <Route
-                        path="/dashboard"
-                        element={<Dashboard />}
-                    />
+        <Route element={<ProtectedRoute />}>
 
-                    <Route
-                        path="/employees"
-                        element={<EmployeeList />}
-                    />
+            <Route element={<MainLayout />}>
 
-                    <Route
-                        path="/departments"
-                        element={<DepartmentList />}
-                    />
+                <Route
+                    path="/dashboard"
+                    element={<Dashboard />}
+                />
 
-                    <Route
-                        path="/attendance"
-                        element={<Attendance />}
-                    />
+                <Route
+                    path="/employees"
+                    element={<EmployeeList />}
+                />
 
-                    <Route
-                        path="/leave"
-                        element={<Leave />}
-                    />
+                <Route
+                    path="/departments"
+                    element={<DepartmentList />}
+                />
 
-                </Routes>
+                <Route
+                    path="/attendance"
+                    element={<Attendance />}
+                />
 
-            </MainLayout>
+                <Route
+                    path="/leave"
+                    element={<Leave />}
+                />
 
-        </BrowserRouter>
+            </Route>
+
+    </Route>
+    </Routes>
+
+</BrowserRouter>
 
     );
 

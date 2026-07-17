@@ -1,4 +1,5 @@
 import { Box, Toolbar } from "@mui/material";
+import { Outlet } from "react-router-dom";
 
 import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
@@ -27,7 +28,7 @@ function MainLayout({ children }) {
 
                 <Toolbar />
 
-                {children}
+                <Outlet />
 
             </Box>
 
