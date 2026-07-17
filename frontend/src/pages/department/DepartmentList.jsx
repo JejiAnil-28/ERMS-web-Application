@@ -1,16 +1,35 @@
 import { useEffect, useState } from "react";
-import { Box, Typography } from "@mui/material";
+
+import {
+    Box,
+    Typography,
+    Button,
+    IconButton
+} from "@mui/material";
+
 import { DataGrid } from "@mui/x-data-grid";
-import { getDepartments } from "../../services/departmentService";
+
+import AddIcon from "@mui/icons-material/Add";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import DepartmentDialog from "../../components/department/DepartmentDialog";
+
+import {
+    getDepartments,
+    createDepartment,
+    updateDepartment
+} from "../../services/departmentService";
+
 
 function DepartmentList() {
 
     const [departments, setDepartments] = useState([]);
+    const [openDialog, setOpenDialog] = useState(false);
+
+const [selectedDepartment, setSelectedDepartment] = useState(null);
 
     useEffect(() => {
-
         loadDepartments();
-
     }, []);
 
     async function loadDepartments() {
@@ -53,6 +72,36 @@ function DepartmentList() {
             field: "description",
             headerName: "Description",
             flex: 2
+        },
+
+        {
+            field: "actions",
+            headerName: "Actions",
+            width: 150,
+            sortable: false,
+            renderCell: (params) => (
+                <>
+                    <IconButton
+                        color="primary"
+                         onClick={() => {
+
+    setSelectedDepartment(params.row);
+
+    setOpenDialog(true);
+
+}}
+                    >
+                        <EditIcon />
+                    </IconButton>
+
+                    <IconButton
+                        color="error"
+                        onClick={() => console.log("Delete", params.row)}
+                    >
+                        <DeleteIcon />
+                    </IconButton>
+                </>
+            )
         }
 
     ];
@@ -61,18 +110,42 @@ function DepartmentList() {
 
         <Box>
 
-            <Typography
-                variant="h4"
-                mb={3}
+            <Box
+                sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    mb: 3
+                }}
             >
-                Departments
-            </Typography>
+
+                <Typography variant="h4">
+                    Departments
+                </Typography>
+
+                <Button
+    variant="contained"
+    startIcon={<AddIcon />}
+    onClick={() => {
+
+        setSelectedDepartment(null);
+
+        setOpenDialog(true);
+
+    }}
+>
+
+    Add Department
+
+</Button>
+
+            </Box>
 
             <DataGrid
                 rows={departments}
                 columns={columns}
                 autoHeight
-                pageSizeOptions={[5,10]}
+                pageSizeOptions={[5, 10]}
                 initialState={{
                     pagination: {
                         paginationModel: {
@@ -82,10 +155,53 @@ function DepartmentList() {
                 }}
             />
 
+            <DepartmentDialog
+
+    open={openDialog}
+
+    department={selectedDepartment}
+
+    onClose={() => setOpenDialog(false)}
+
+    onSave={async (department) => {
+
+    try {
+
+        if (selectedDepartment) {
+
+            await updateDepartment(
+                selectedDepartment.id,
+                department
+            );
+
+        } else {
+
+            await createDepartment(
+                department
+            );
+
+        }
+
+        await loadDepartments();
+
+        setOpenDialog(false);
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(error.response?.data?.message || "Operation failed");
+
+    }
+
+}}
+
+/>
+
         </Box>
 
     );
 
 }
 
-export default DepartmentList;
+export default DepartmentList;  

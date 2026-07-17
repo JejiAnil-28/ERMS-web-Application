@@ -53,10 +53,12 @@ function Dashboard() {
 
         return (
             <Box
-                display="flex"
-                justifyContent="center"
-                mt={5}
-            >
+    sx={{
+        display: "flex",
+        justifyContent: "center",
+        mt: 5
+    }}
+>
                 <CircularProgress />
             </Box>
         );
@@ -106,10 +108,7 @@ function Dashboard() {
                 {cards.map((card) => (
 
                     <Grid
-                        item
-                        xs={12}
-                        sm={6}
-                        md={3}
+                        size={{ xs: 12, sm: 6, md: 3 }}
                         key={card.title}
                     >
 
