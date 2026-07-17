@@ -1,21 +1,15 @@
 import { useEffect, useState } from "react";
 
-import {
-    Box,
-    Typography,
-    Button,
-    IconButton
-} from "@mui/material";
-
-import { DataGrid } from "@mui/x-data-grid";
+import { Box } from "@mui/material";
 import { toast } from "react-toastify";
 
 import AddIcon from "@mui/icons-material/Add";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
 
 import DepartmentDialog from "../../components/department/DepartmentDialog";
-import DeleteDepartmentDialog from "../../components/department/DeleteDepartmentDialog";
+import DepartmentTable from "../../components/department/DepartmentTable";
+
+import PageHeader from "../../components/common/PageHeader";
+import ConfirmDialog from "../../components/common/ConfirmDialog";
 
 import {
     getDepartments,
@@ -27,14 +21,19 @@ import {
 function DepartmentList() {
 
     const [departments, setDepartments] = useState([]);
+
     const [openDialog, setOpenDialog] = useState(false);
+
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
-    const [departmentToDelete, setDepartmentToDelete] = useState(null);
     const [selectedDepartment, setSelectedDepartment] = useState(null);
 
+    const [departmentToDelete, setDepartmentToDelete] = useState(null);
+
     useEffect(() => {
+
         loadDepartments();
+
     }, []);
 
     async function loadDepartments() {
@@ -58,190 +57,145 @@ function DepartmentList() {
 
     }
 
-    const columns = [
+    async function handleSaveDepartment(department) {
 
-        {
-            field: "id",
-            headerName: "ID",
-            width: 90
-        },
+        try {
 
-        {
-            field: "departmentName",
-            headerName: "Department",
-            flex: 1
-        },
+            if (selectedDepartment) {
 
-        {
-            field: "departmentHead",
-            headerName: "Department Head",
-            flex: 1
-        },
+                await updateDepartment(
+                    selectedDepartment.id,
+                    department
+                );
 
-        {
-            field: "description",
-            headerName: "Description",
-            flex: 2
-        },
+                toast.success(
+                    "Department updated successfully"
+                );
 
-        {
-            field: "actions",
-            headerName: "Actions",
-            width: 150,
-            sortable: false,
+            } else {
 
-            renderCell: (params) => (
-                <>
-                    <IconButton
-                        color="primary"
-                        onClick={() => {
-                            setSelectedDepartment(params.row);
-                            setOpenDialog(true);
-                        }}
-                    >
-                        <EditIcon />
-                    </IconButton>
+                await createDepartment(
+                    department
+                );
 
-                    <IconButton
-                        color="error"
-                        onClick={() => {
-                            setDepartmentToDelete(params.row);
-                            setDeleteDialogOpen(true);
-                        }}
-                    >
-                        <DeleteIcon />
-                    </IconButton>
-                </>
-            )
+                toast.success(
+                    "Department created successfully"
+                );
+
+            }
+
+            await loadDepartments();
+
+            setOpenDialog(false);
+
+            setSelectedDepartment(null);
+
+        } catch (error) {
+
+            console.error(error);
+
+            toast.error(
+                error.response?.data?.message ||
+                "Operation failed"
+            );
+
         }
 
-    ];
+    }
+
+    async function handleDeleteDepartment() {
+
+        try {
+
+            await deleteDepartment(
+                departmentToDelete.id
+            );
+
+            toast.success(
+                "Department deleted successfully"
+            );
+
+            await loadDepartments();
+
+            setDeleteDialogOpen(false);
+
+            setDepartmentToDelete(null);
+
+        } catch (error) {
+
+            console.error(error);
+
+            toast.error(
+                error.response?.data?.message ||
+                "Failed to delete department"
+            );
+
+        }
+
+    }
 
     return (
 
         <Box>
 
-            <Box
-                sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    mb: 3
+            <PageHeader
+                title="Departments"
+                buttonText="Add Department"
+                buttonIcon={<AddIcon />}
+                onButtonClick={() => {
+
+                    setSelectedDepartment(null);
+
+                    setOpenDialog(true);
+
                 }}
-            >
+            />
 
-                <Typography variant="h4">
-                    Departments
-                </Typography>
+            <DepartmentTable
+                departments={departments}
+                onEdit={(department) => {
 
-                <Button
-                    variant="contained"
-                    startIcon={<AddIcon />}
-                    onClick={() => {
-                        setSelectedDepartment(null);
-                        setOpenDialog(true);
-                    }}
-                >
-                    Add Department
-                </Button>
+                    setSelectedDepartment(department);
 
-            </Box>
+                    setOpenDialog(true);
 
-            <DataGrid
-                rows={departments}
-                columns={columns}
-                autoHeight
-                pageSizeOptions={[5, 10]}
-                initialState={{
-                    pagination: {
-                        paginationModel: {
-                            pageSize: 5
-                        }
-                    }
+                }}
+                onDelete={(department) => {
+
+                    setDepartmentToDelete(department);
+
+                    setDeleteDialogOpen(true);
+
                 }}
             />
 
             <DepartmentDialog
                 open={openDialog}
                 department={selectedDepartment}
-                onClose={() => setOpenDialog(false)}
-                onSave={async (department) => {
+                onClose={() => {
 
-                    try {
+                    setOpenDialog(false);
 
-                        if (selectedDepartment) {
-
-                            await updateDepartment(
-                                selectedDepartment.id,
-                                department
-                            );
-
-                            toast.success(
-                                "Department updated successfully"
-                            );
-
-                        } else {
-
-                            await createDepartment(
-                                department
-                            );
-
-                            toast.success(
-                                "Department created successfully"
-                            );
-
-                        }
-
-                        await loadDepartments();
-
-                        setOpenDialog(false);
-
-                    } catch (error) {
-
-                        console.error(error);
-
-                        toast.error(
-                            error.response?.data?.message ||
-                            "Operation failed"
-                        );
-
-                    }
+                    setSelectedDepartment(null);
 
                 }}
+                onSave={handleSaveDepartment}
             />
 
-            <DeleteDepartmentDialog
+            <ConfirmDialog
                 open={deleteDialogOpen}
-                department={departmentToDelete}
-                onClose={() => setDeleteDialogOpen(false)}
-                onConfirm={async () => {
+                title="Delete Department"
+                message={`Are you sure you want to delete "${departmentToDelete?.departmentName}"?`}
+                confirmText="Delete"
+                confirmColor="error"
+                onClose={() => {
 
-                    try {
+                    setDeleteDialogOpen(false);
 
-                        await deleteDepartment(
-                            departmentToDelete.id
-                        );
-
-                        toast.success(
-                            "Department deleted successfully"
-                        );
-
-                        await loadDepartments();
-
-                        setDeleteDialogOpen(false);
-
-                    } catch (error) {
-
-                        console.error(error);
-
-                        toast.error(
-                            error.response?.data?.message ||
-                            "Operation failed"
-                        );
-
-                    }
+                    setDepartmentToDelete(null);
 
                 }}
+                onConfirm={handleDeleteDepartment}
             />
 
         </Box>
