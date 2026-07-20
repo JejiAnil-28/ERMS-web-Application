@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import java.security.Key;
+import jakarta.annotation.PostConstruct;
 
 @Service
 public class JwtService {
@@ -29,6 +30,13 @@ public class JwtService {
 
     @Value("${jwt.expiration}")
     private long jwtExpiration;
+
+
+
+    @PostConstruct
+    public void init() {
+        System.out.println("JWT Secret Loaded: " + secretKey);
+    }
 
     private Key getSigningKey() {
 

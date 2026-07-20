@@ -24,13 +24,17 @@ public class EmployeeMapper {
         response.setHireDate(employee.getHireDate());
         response.setStatus(employee.getStatus());
 
+        response.setDepartmentId(
+                employee.getDepartment().getId());
+
         response.setDepartmentName(
-                employee.getDepartment().getDepartmentName()
-        );
+                employee.getDepartment().getDepartmentName());
+
+        response.setRoleId(
+                employee.getRole().getId());
 
         response.setRoleName(
-                employee.getRole().getRoleName()
-        );
+                employee.getRole().getRoleName());
 
         return response;
     }

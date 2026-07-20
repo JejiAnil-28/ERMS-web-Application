@@ -11,7 +11,7 @@ import Login from "../pages/auth/Login";
 import Dashboard from "../pages/dashboard/Dashboard";
 import EmployeeList from "../pages/employee/EmployeeList";
 import DepartmentList from "../pages/department/DepartmentList";
-import Attendance from "../pages/attendance/Attendance";
+import AttendanceList from "../pages/attendance/AttendanceList";
 import Leave from "../pages/leave/Leave";
 
 function AppRoutes() {
@@ -49,9 +49,9 @@ function AppRoutes() {
                 />
 
                 <Route
-                    path="/attendance"
-                    element={<Attendance />}
-                />
+    path="/attendance"
+    element={<AttendanceList />}
+/>
 
                 <Route
                     path="/leave"

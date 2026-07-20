@@ -31,12 +31,33 @@ public class EmployeeResponse {
 
     private String roleName;
 
+    private Long departmentId;
+
+    private Long roleId;
+
 
 
     public EmployeeResponse() {
     }
 
     // Generate getters & setters
+
+
+    public Long getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(Long departmentId) {
+        this.departmentId = departmentId;
+    }
+
+    public Long getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(Long roleId) {
+        this.roleId = roleId;
+    }
 
     public Long getId() {
         return id;
