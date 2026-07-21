@@ -13,6 +13,9 @@ import EmployeeList from "../pages/employee/EmployeeList";
 import DepartmentList from "../pages/department/DepartmentList";
 import AttendanceList from "../pages/attendance/AttendanceList";
 import LeaveList from "../pages/leave/LeaveList";
+import PayrollList from "../pages/payroll/PayrollList";
+import ProfilePage from "../pages/profile/ProfilePage";
+import SettingsPage from "../pages/settings/SettingsPage";
 
 function AppRoutes() {
 
@@ -56,6 +59,21 @@ function AppRoutes() {
                 <Route
     path="/leaves"
     element={<LeaveList />}
+/>
+
+<Route
+    path="/payroll"
+    element={<PayrollList />}
+/>
+<Route
+
+    path="/profile"
+    element={<ProfilePage />}
+/>
+
+<Route
+    path="/settings"
+    element={<SettingsPage />}
 />
 
             </Route>

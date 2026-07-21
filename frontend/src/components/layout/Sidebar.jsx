@@ -12,9 +12,9 @@ import GroupsIcon from "@mui/icons-material/Groups";
 import BusinessIcon from "@mui/icons-material/Business";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import EventNoteIcon from "@mui/icons-material/EventNote";
-import LogoutIcon from "@mui/icons-material/Logout";
+import PaymentsIcon from "@mui/icons-material/Payments";
 
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -40,13 +40,20 @@ const menuItems = [
         path: "/attendance"
     },
     {
-    text: "Leave",
-    icon: <EventNoteIcon />,
-    path: "/leaves"
-}
+        text: "Leave",
+        icon: <EventNoteIcon />,
+        path: "/leaves"
+    },
+    {
+        text: "Payroll",
+        icon: <PaymentsIcon />,
+        path: "/payroll"
+    }
 ];
 
 function Sidebar() {
+
+    const location = useLocation();
 
     return (
 
@@ -72,10 +79,13 @@ function Sidebar() {
                         key={item.text}
                         component={Link}
                         to={item.path}
+                        selected={location.pathname === item.path}
                     >
 
                         <ListItemIcon>
+
                             {item.icon}
+
                         </ListItemIcon>
 
                         <ListItemText
@@ -85,20 +95,6 @@ function Sidebar() {
                     </ListItemButton>
 
                 ))}
-
-                <ListItemButton>
-
-                    <ListItemIcon>
-
-                        <LogoutIcon />
-
-                    </ListItemIcon>
-
-                    <ListItemText
-                        primary="Logout"
-                    />
-
-                </ListItemButton>
 
             </List>
 
