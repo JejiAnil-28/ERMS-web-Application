@@ -12,7 +12,7 @@ import Dashboard from "../pages/dashboard/Dashboard";
 import EmployeeList from "../pages/employee/EmployeeList";
 import DepartmentList from "../pages/department/DepartmentList";
 import AttendanceList from "../pages/attendance/AttendanceList";
-import Leave from "../pages/leave/Leave";
+import LeaveList from "../pages/leave/LeaveList";
 
 function AppRoutes() {
 
@@ -54,9 +54,9 @@ function AppRoutes() {
 />
 
                 <Route
-                    path="/leave"
-                    element={<Leave />}
-                />
+    path="/leaves"
+    element={<LeaveList />}
+/>
 
             </Route>
 

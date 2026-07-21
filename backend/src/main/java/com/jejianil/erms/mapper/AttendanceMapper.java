@@ -14,21 +14,42 @@ public class AttendanceMapper {
 
         response.setId(attendance.getId());
 
+        response.setEmployeeId(
+                attendance.getEmployee().getId()
+        );
+
         response.setEmployeeCode(
                 attendance.getEmployee().getEmployeeCode()
         );
 
         response.setEmployeeName(
-                attendance.getEmployee().getFirstName() + " "
+                attendance.getEmployee().getFirstName()
+                        + " "
                         + attendance.getEmployee().getLastName()
         );
 
-        response.setAttendanceDate(attendance.getAttendanceDate());
-        response.setCheckInTime(attendance.getCheckInTime());
-        response.setCheckOutTime(attendance.getCheckOutTime());
-        response.setStatus(attendance.getStatus());
-        response.setRemarks(attendance.getRemarks());
+        response.setAttendanceDate(
+                attendance.getAttendanceDate()
+        );
+
+        response.setCheckInTime(
+                attendance.getCheckInTime()
+        );
+
+        response.setCheckOutTime(
+                attendance.getCheckOutTime()
+        );
+
+        response.setStatus(
+                attendance.getStatus()
+        );
+
+        response.setRemarks(
+                attendance.getRemarks()
+        );
 
         return response;
+
     }
+
 }

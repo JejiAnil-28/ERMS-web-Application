@@ -38,6 +38,25 @@ public class LeaveController {
                 );
     }
 
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<LeaveResponse>>> getAllLeaves() {
+
+        return ResponseEntity.ok(
+
+                new ApiResponse<>(
+
+                        true,
+
+                        "Leaves fetched successfully",
+
+                        leaveService.getAllLeaves()
+
+                )
+
+        );
+
+    }
+
     @PutMapping("/{leaveId}/approve/{approverId}")
     public ResponseEntity<ApiResponse<LeaveResponse>> approveLeave(
             @PathVariable Long leaveId,

@@ -8,26 +8,40 @@ import {
 } from "@mui/material";
 
 function ConfirmDialog({
+
     open,
+
     title,
+
     message,
-    confirmText = "Delete",
-    confirmColor = "error",
+
+    confirmText = "Confirm",
+
+    cancelText = "Cancel",
+
+    confirmColor = "primary",
+
     loading = false,
+
     onClose,
+
     onConfirm
+
 }) {
 
     return (
+
         <Dialog
             open={open}
-            onClose={onClose}
+            onClose={loading ? undefined : onClose}
             fullWidth
             maxWidth="xs"
         >
 
             <DialogTitle>
+
                 {title}
+
             </DialogTitle>
 
             <DialogContent>
@@ -46,7 +60,7 @@ function ConfirmDialog({
                     onClick={onClose}
                     disabled={loading}
                 >
-                    Cancel
+                    {cancelText}
                 </Button>
 
                 <Button
@@ -55,12 +69,13 @@ function ConfirmDialog({
                     onClick={onConfirm}
                     disabled={loading}
                 >
-                    {loading ? "Please wait..." : confirmText}
+                    {loading ? "Please Wait..." : confirmText}
                 </Button>
 
             </DialogActions>
 
         </Dialog>
+
     );
 
 }

@@ -40,10 +40,10 @@ const menuItems = [
         path: "/attendance"
     },
     {
-        text: "Leave",
-        icon: <EventNoteIcon />,
-        path: "/leave"
-    }
+    text: "Leave",
+    icon: <EventNoteIcon />,
+    path: "/leaves"
+}
 ];
 
 function Sidebar() {

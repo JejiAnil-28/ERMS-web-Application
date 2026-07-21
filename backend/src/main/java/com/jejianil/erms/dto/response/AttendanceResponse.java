@@ -7,6 +7,8 @@ public class AttendanceResponse {
 
     private Long id;
 
+    private Long employeeId;
+
     private String employeeCode;
 
     private String employeeName;
@@ -21,13 +23,12 @@ public class AttendanceResponse {
 
     private String remarks;
 
-
-
     public AttendanceResponse() {
     }
 
-    // Generate Getters & Setters
-
+    // ==========================
+    // Getters & Setters
+    // ==========================
 
     public Long getId() {
         return id;
@@ -35,6 +36,14 @@ public class AttendanceResponse {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public Long getEmployeeId() {
+        return employeeId;
+    }
+
+    public void setEmployeeId(Long employeeId) {
+        this.employeeId = employeeId;
     }
 
     public String getEmployeeCode() {
@@ -92,4 +101,5 @@ public class AttendanceResponse {
     public void setRemarks(String remarks) {
         this.remarks = remarks;
     }
+
 }

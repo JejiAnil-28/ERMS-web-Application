@@ -9,6 +9,43 @@ function AttendanceTable({
 
 }) {
 
+    const formatDate = (date) => {
+
+        if (!date) return "--";
+
+        return new Date(date).toLocaleDateString("en-GB", {
+
+            day: "2-digit",
+
+            month: "short",
+
+            year: "numeric"
+
+        });
+
+    };
+
+    const formatTime = (time) => {
+
+        if (!time) return "--";
+
+        const [hours, minutes] = time.split(":");
+
+        const date = new Date();
+
+        date.setHours(hours);
+        date.setMinutes(minutes);
+
+        return date.toLocaleTimeString([], {
+
+            hour: "2-digit",
+
+            minute: "2-digit"
+
+        });
+
+    };
+
     const columns = [
 
         {
@@ -27,23 +64,28 @@ function AttendanceTable({
         {
             field: "attendanceDate",
             headerName: "Date",
-            width: 130
+            width: 140,
+
+            valueGetter: (_, row) =>
+                formatDate(row.attendanceDate)
         },
 
         {
             field: "checkInTime",
             headerName: "Check In",
             width: 120,
+
             valueGetter: (_, row) =>
-                row.checkInTime || "-"
+                formatTime(row.checkInTime)
         },
 
         {
             field: "checkOutTime",
             headerName: "Check Out",
             width: 120,
+
             valueGetter: (_, row) =>
-                row.checkOutTime || "-"
+                formatTime(row.checkOutTime)
         },
 
         {
@@ -83,9 +125,11 @@ function AttendanceTable({
                         label={params.value}
                         color={color}
                         size="small"
+                        variant="filled"
                     />
 
                 );
+
             }
 
         },
@@ -94,9 +138,10 @@ function AttendanceTable({
             field: "remarks",
             headerName: "Remarks",
             flex: 1.5,
-            minWidth: 200,
+            minWidth: 220,
+
             valueGetter: (_, row) =>
-                row.remarks || "-"
+                row.remarks || "--"
         }
 
     ];
@@ -128,6 +173,12 @@ function AttendanceTable({
                     }
 
                 }
+
+            }}
+
+            localeText={{
+
+                noRowsLabel: "No attendance records found."
 
             }}
 

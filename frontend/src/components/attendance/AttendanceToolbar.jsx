@@ -12,12 +12,15 @@ function AttendanceToolbar({
 
     search,
     setSearch,
-
     onRefresh,
-
     onOpenCheckIn,
+    onOpenCheckOut,
 
-    onOpenCheckOut
+    checkedIn,
+    checkedOut,
+
+    checkInLoading,
+    checkOutLoading
 
 }) {
 
@@ -37,6 +40,7 @@ function AttendanceToolbar({
             <TextField
                 size="small"
                 label="Search Employee"
+                placeholder="Search by code or name..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
             />
@@ -50,21 +54,23 @@ function AttendanceToolbar({
             >
 
                 <Button
-    variant="contained"
-    startIcon={<LoginIcon />}
-    onClick={onOpenCheckIn}
->
-    Check In
-</Button>
+                    variant="contained"
+                    startIcon={<LoginIcon />}
+                    onClick={onOpenCheckIn}
+                    disabled={checkedIn || checkInLoading}
+                >
+                    {checkInLoading ? "Checking In..." : "Check In"}
+                </Button>
 
-<Button
-    variant="outlined"
-    color="error"
-    startIcon={<LogoutIcon />}
-    onClick={onOpenCheckOut}
->
-    Check Out
-</Button>
+                <Button
+                    variant="outlined"
+                    color="error"
+                    startIcon={<LogoutIcon />}
+                    onClick={onOpenCheckOut}
+                    disabled={!checkedIn || checkedOut || checkOutLoading}
+                >
+                    {checkOutLoading ? "Checking Out..." : "Check Out"}
+                </Button>
 
                 <Button
                     variant="outlined"

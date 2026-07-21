@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface LeaveService {
 
+    List<LeaveResponse> getAllLeaves();
     LeaveResponse applyLeave(LeaveRequestDto request);
 
     List<LeaveResponse> getEmployeeLeaves(Long employeeId);

@@ -32,6 +32,16 @@ public class LeaveServiceImpl implements LeaveService {
         this.employeeRepository = employeeRepository;
         this.userRepository = userRepository;
     }
+
+    @Override
+    public List<LeaveResponse> getAllLeaves() {
+
+        return leaveRepository.findAll()
+                .stream()
+                .map(LeaveMapper::toResponse)
+                .toList();
+
+    }
     @Override
     public LeaveResponse applyLeave(
             LeaveRequestDto request) {

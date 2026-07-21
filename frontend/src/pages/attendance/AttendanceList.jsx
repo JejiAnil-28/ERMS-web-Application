@@ -20,18 +20,25 @@ function AttendanceList() {
     const [loading, setLoading] = useState(false);
     const [search, setSearch] = useState("");
 
-    // ==========================
-    // Dialog States
-    // ==========================
+    // Attendance Status
+    const [checkedIn, setCheckedIn] = useState(false);
+    const [checkedOut, setCheckedOut] = useState(false);
 
+    // Button Loading
+    const [checkInLoading, setCheckInLoading] = useState(false);
+    const [checkOutLoading, setCheckOutLoading] = useState(false);
+
+    // Dialog States
     const [checkInOpen, setCheckInOpen] = useState(false);
     const [checkOutOpen, setCheckOutOpen] = useState(false);
 
-    // TODO: Replace with logged-in employee ID after auth integration
+    // TODO: Replace with logged-in employee after JWT integration
     const EMPLOYEE_ID = 2;
 
     useEffect(() => {
+
         loadAttendance();
+
     }, []);
 
     const loadAttendance = async () => {
@@ -42,13 +49,44 @@ function AttendanceList() {
 
             const response = await getTodayAttendance();
 
-            setAttendance(response.data.data);
+            const attendanceData = response.data.data;
+
+            setAttendance(attendanceData);
+
+            // Temporary
+            // Later compare using logged-in employee id from JWT
+            const todayRecord = attendanceData.find(
+
+                item => item.employeeId === EMPLOYEE_ID
+
+                // OR
+
+                // item.employeeCode === "EMP001"
+
+            );
+
+            if (todayRecord) {
+
+                setCheckedIn(!!todayRecord.checkInTime);
+
+                setCheckedOut(!!todayRecord.checkOutTime);
+
+            } else {
+
+                setCheckedIn(false);
+
+                setCheckedOut(false);
+
+            }
 
         } catch (error) {
 
             toast.error(
+
                 error.response?.data?.message ||
+
                 "Failed to load attendance"
+
             );
 
         } finally {
@@ -60,7 +98,7 @@ function AttendanceList() {
     };
 
     // ==========================
-    // Check-In Dialog Handlers
+    // Check In Dialog
     // ==========================
 
     const openCheckInDialog = () => {
@@ -76,7 +114,7 @@ function AttendanceList() {
     };
 
     // ==========================
-    // Check-Out Dialog Handlers
+    // Check Out Dialog
     // ==========================
 
     const openCheckOutDialog = () => {
@@ -99,6 +137,8 @@ function AttendanceList() {
 
         try {
 
+            setCheckInLoading(true);
+
             await checkIn(attendanceRequest);
 
             toast.success("Checked In Successfully");
@@ -110,9 +150,16 @@ function AttendanceList() {
         } catch (error) {
 
             toast.error(
+
                 error.response?.data?.message ||
+
                 "Check In Failed"
+
             );
+
+        } finally {
+
+            setCheckInLoading(false);
 
         }
 
@@ -126,6 +173,8 @@ function AttendanceList() {
 
         try {
 
+            setCheckOutLoading(true);
+
             await checkOut(EMPLOYEE_ID);
 
             toast.success("Checked Out Successfully");
@@ -137,9 +186,16 @@ function AttendanceList() {
         } catch (error) {
 
             toast.error(
+
                 error.response?.data?.message ||
+
                 "Check Out Failed"
+
             );
+
+        } finally {
+
+            setCheckOutLoading(false);
 
         }
 
@@ -151,25 +207,15 @@ function AttendanceList() {
 
     const filteredAttendance = useMemo(() => {
 
-        return attendance.filter((employee) => {
+        const keyword = search.toLowerCase();
 
-            const keyword = search.toLowerCase();
+        return attendance.filter(employee =>
 
-            return (
+            employee.employeeCode?.toLowerCase().includes(keyword) ||
 
-                employee.employeeCode
-                    ?.toLowerCase()
-                    .includes(keyword)
+            employee.employeeName?.toLowerCase().includes(keyword)
 
-                ||
-
-                employee.employeeName
-                    ?.toLowerCase()
-                    .includes(keyword)
-
-            );
-
-        });
+        );
 
     }, [attendance, search]);
 
@@ -189,9 +235,14 @@ function AttendanceList() {
                 onRefresh={loadAttendance}
                 onOpenCheckIn={openCheckInDialog}
                 onOpenCheckOut={openCheckOutDialog}
+                checkedIn={checkedIn}
+                checkedOut={checkedOut}
+                checkInLoading={checkInLoading}
+                checkOutLoading={checkOutLoading}
             />
 
-            {/* Check-In Dialog */}
+            {/* Check In */}
+
             <AttendanceDialog
                 open={checkInOpen}
                 onClose={closeCheckInDialog}
@@ -199,7 +250,8 @@ function AttendanceList() {
                 type="CHECK_IN"
             />
 
-            {/* Check-Out Dialog */}
+            {/* Check Out */}
+
             <AttendanceDialog
                 open={checkOutOpen}
                 onClose={closeCheckOutDialog}
